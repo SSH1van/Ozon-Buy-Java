@@ -1,8 +1,9 @@
-package com.ivan.selenium.ozonbuy;
+package com.ivan.selenium.ozonbuy.WebDriver;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -66,10 +67,12 @@ public class Main {
         chromeOptions.addArguments("user-data-dir=" + absolutePath);
         chromeOptions.addArguments("profile-directory=Default");
         if (headless) {
-            chromeOptions.addArguments("--headless");
+            chromeOptions.addArguments("--headless=new");
+            chromeOptions.addArguments("--disable-gpu");
         }
 
         driver = new ChromeDriver(chromeOptions);
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 
         try {
             driver.get("https://www.ozon.ru/cart");
@@ -78,20 +81,22 @@ public class Main {
             Random random = new Random();
             while (true) {
                 try {
-                    WebElement priceElement = driver.findElement(By.xpath("//span[@class='c3022-a1 tsHeadline400Small c3022-b1 c3022-a5']"));
+                    WebElement priceElement = driver.findElement(By.xpath("//div[@class='bo5_4_6 c3022-a c3022-b8']//span[contains(@class, 'c3022-a1') and contains(text(), '₽')]"));
                     String priceText = priceElement.getText();
                     int price = Integer.parseInt(priceText.replaceAll("\\D", ""));
 
                     if (price < maxPrice) {
                         break;
-//                         System.out.println(price);
+//                        System.out.println(price);
                     }
 
                     driver.navigate().refresh();
-                    TimeUnit.MILLISECONDS.sleep(500 + random.nextInt(1500));
+                    TimeUnit.MILLISECONDS.sleep(100 + random.nextInt(250));
+                    jsExecutor.executeScript("window.stop();");
                 } catch (Exception e) {
                     driver.navigate().refresh();
-                    TimeUnit.MILLISECONDS.sleep(500 + random.nextInt(1500));
+                    TimeUnit.MILLISECONDS.sleep(100 + random.nextInt(250));
+                    jsExecutor.executeScript("window.stop();");
                 }
             }
 
@@ -99,17 +104,16 @@ public class Main {
             WebElement checkoutButton = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(@class, 'b2120-a0') and .//div[text()='Перейти к оформлению']]")));
             checkoutButton.click();
-
             WebElement payOnlineButton = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(@class, 'b2120-a0') and .//div[text()='Оплатить онлайн']]")));
             payOnlineButton.click();
-
             System.out.println("bought");
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Произошла ошибка.", e);
         } finally {
             try {
-                TimeUnit.SECONDS.sleep(120);
+                TimeUnit.SECONDS.sleep(5);
             } catch (InterruptedException e) {
                 LOGGER.log(Level.WARNING, "Пауза была прервана.", e);
             }

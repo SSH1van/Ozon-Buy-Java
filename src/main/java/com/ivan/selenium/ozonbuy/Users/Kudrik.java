@@ -1,8 +1,10 @@
-package com.ivan.selenium.ozonbuy;
+package com.ivan.selenium.ozonbuy.Users;
 
-public class Korsh {
+import com.ivan.selenium.ozonbuy.WebDriver.Main;
+
+public class Kudrik {
     public static void main(String[] args) {
-        String relativePath = "Data/User Data Korsh";
+        String relativePath = "Data/User Data Kudrik";
         int maxPrice = 1000;
         int timeWait = 5;
         boolean headless = true;
