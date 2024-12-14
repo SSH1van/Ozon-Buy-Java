@@ -11,8 +11,8 @@ public class Main {
 
     private static final String OZON_CART_XPATH = "https://www.ozon.ru/cart";
 
-    private static final String CHECKOUT_BUTTON_XPATH = "//button[contains(@class, 'b2120-a0') and .//div[text()='Перейти к оформлению']]";
-    private static final String PAY_ONLINE_BUTTON_XPATH = "//button[contains(@class, 'b2120-a0') and .//div[text()='Оплатить онлайн']]";
+    private static final String CHECKOUT_BUTTON_XPATH = "//button[.//text()[normalize-space()='Перейти к оформлению']]";
+    private static final String PAY_ONLINE_BUTTON_XPATH = "//button[.//text()[normalize-space()='Оплатить онлайн']]";
 
     public static void startWebDriver(String relativePath, int maxPrice, long timeRefresh, long timeSleep, boolean headless) {
         WebDriverManager driverManager = new WebDriverManager();

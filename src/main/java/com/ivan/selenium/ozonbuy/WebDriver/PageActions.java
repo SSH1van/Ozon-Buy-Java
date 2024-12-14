@@ -27,12 +27,14 @@ public class PageActions {
     }
 
     // Ожидаем, когда цена опуститься нижу указанной
-    private static final String PRICE_ELEMENT_XPATH = "//div[@class='bo5_4_6 c3022-a c3022-b8']//span[contains(@class, 'c3022-a1') and contains(text(), '₽')]";
+    private static final String PRICE_ELEMENT_XPATH = "//span[text()='С Ozon Картой']/ancestor::div[1]//font";
     public void waitBestPrice(int maxPrice) throws InterruptedException {
         Random random = new Random();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(300));
+
         while (true) {
             try {
-                WebElement priceElement = driver.findElement(By.xpath(PRICE_ELEMENT_XPATH));
+                WebElement priceElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(PRICE_ELEMENT_XPATH)));
                 String priceText = priceElement.getText();
                 int price = Integer.parseInt(priceText.replaceAll("\\D", ""));
 
