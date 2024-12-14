@@ -23,7 +23,7 @@ public class PageActions {
         } catch (Exception TimeoutException) {
             // Ошибка загрузки страницы ожидаема
         }
-        TimeUnit.MILLISECONDS.sleep(timeSleep);
+        TimeUnit.SECONDS.sleep(timeSleep);
     }
 
     // Ожидаем, когда цена опуститься нижу указанной
